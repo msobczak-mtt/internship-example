@@ -1,15 +1,18 @@
 package travel.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import travel.Transportation;
 import travel.impl.Kitchen;
 
 import java.util.List;
 
 @Configuration
 @ComponentScan("travel")
+@Slf4j
 public class TravelConfig {
 
     @Bean
@@ -25,6 +28,11 @@ public class TravelConfig {
     @Bean
     FactoryBean<List<String>> meals(){
         return new Kitchen();
+    }
+
+    @Bean
+    Transportation teleportation(){
+        return passenger -> System.out.println("teleporting passenger " + passenger);
     }
 
 
