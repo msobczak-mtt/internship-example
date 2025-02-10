@@ -1,16 +1,11 @@
 package vod.service;
 
 import lombok.extern.slf4j.Slf4j;
-import vod.model.Movie;
-import vod.repository.CinemaDao;
-import vod.repository.DirectorDao;
-import vod.repository.MovieDao;
-import vod.repository.mem.MemCinemaDao;
-import vod.repository.mem.MemDirectorDao;
-import vod.repository.mem.MemMovieDao;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import vod.config.VodConfig;
 import vod.model.Cinema;
-import vod.service.impl.CinemaServiceBean;
-import vod.service.impl.MovieServiceBean;
+import vod.model.Movie;
 
 import java.util.List;
 
@@ -19,20 +14,23 @@ public class VodServiceMain {
 
     public static void main(String[] args) throws ClassNotFoundException {
         log.info("Let's find cinemas!");
-        Class.forName("vod.repository.mem.SampleData");
+        //Class.forName("vod.repository.mem.SampleData");
 
         // service preparation
-        CinemaDao cinemaDao = new MemCinemaDao();
+       /* CinemaDao cinemaDao = new MemCinemaDao();
         MovieDao movieDao = new MemMovieDao();
         DirectorDao directorDao = new MemDirectorDao();
-
-        CinemaService service = new CinemaServiceBean(cinemaDao, movieDao);
-        MovieService movieService = new MovieServiceBean(directorDao, cinemaDao, movieDao);
+*/
+        ApplicationContext context = new AnnotationConfigApplicationContext(VodConfig.class);
+        CinemaService service = context.getBean(CinemaService.class);
+                //new CinemaServiceBean(cinemaDao, movieDao);
+        MovieService movieService = context.getBean(MovieService.class);
+                //new MovieServiceBean(directorDao, cinemaDao, movieDao);
 
         // service use
         List<Cinema> cinemas = service.getAllCinemas();
         log.info(cinemas.size() + " cinemas found:");
-        cinemas.forEach(System.out::println);
+        cinemas.forEach(cinema -> log.info("cinema: {}", cinema));
 
         Movie movie = movieService.getMovieById(2);
         log.info("Movie {}", movie.getTitle());

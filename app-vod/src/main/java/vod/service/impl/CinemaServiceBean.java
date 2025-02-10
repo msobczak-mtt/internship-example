@@ -2,6 +2,7 @@ package vod.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import vod.model.Cinema;
 import vod.model.Movie;
 import vod.repository.CinemaDao;
@@ -14,6 +15,7 @@ import java.util.logging.Logger;
 
 @RequiredArgsConstructor
 @Slf4j
+@Component
 public class CinemaServiceBean implements CinemaService {
 
     private final CinemaDao cinemaDao;
