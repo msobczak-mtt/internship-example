@@ -2,26 +2,32 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd"
+       http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd
+       http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd"
 >
 
-    <bean id="travel" class="travel.Travel" scope="prototype" autowire="byName" >
-       <!-- <property name="name" ref="travelName"/>
+    <context:annotation-config/>
+    <context:component-scan base-package="travel"/>
+
+
+    <!--<bean id="travel" class="travel.Travel" scope="prototype" autowire="byName" >
+       &lt;!&ndash; <property name="name" ref="travelName"/>
         <property name="transportation" ref="transportation"/>
-        <property name="accomodation" ref="accomodation"/>-->
-    </bean>
+        <property name="accomodation" ref="accomodation"/>&ndash;&gt;
+    </bean>-->
 
     <bean id="travelName" class="java.lang.String">
         <constructor-arg value="Travel 2025" type="java.lang.String"/>
     </bean>
 
-    <bean id="transportation" class="travel.impl.Bus">
-    </bean>
+<!--    <bean id="transportation" class="travel.impl.Bus">
+    </bean>-->
 
-    <bean id="accomodation" class="travel.impl.Hotel" autowire="byName">
-      <!--  <property name="meals" ref="meals"/>-->
-    </bean>
+<!--    <bean id="accomodation" class="travel.impl.Hotel" autowire="byName">
+      &lt;!&ndash;  <property name="meals" ref="meals"/>&ndash;&gt;
+    </bean>-->
 
     <bean id="meals" class="travel.impl.Kitchen">
     </bean>

@@ -1,9 +1,16 @@
 package travel;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class Travel {
 
+    @Autowired
     private String name;
+    @Autowired
     private Transportation transportation;
+    @Autowired
     private Accomodation accomodation;
 
     public Travel(String name, Transportation transportation, Accomodation accomodation) {

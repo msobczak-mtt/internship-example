@@ -26,7 +26,6 @@ public class TravelMain {
 
         ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
         Travel travel = (Travel)context.getBean("travel");
-        Travel travel2 = (Travel)context.getBean("travel");
 
         // service use
         travel.travel(doe);
