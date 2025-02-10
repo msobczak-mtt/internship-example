@@ -13,11 +13,10 @@ import java.util.List;
 @Component
 public class Hotel implements Accomodation {
 
-    @Autowired
-    @Qualifier("meals")
     private List<String> meals;
 
-    public void setMeals(List<String> meals) {
+    @Autowired
+    public void setMeals(@Qualifier("meals") List<String> meals) {
         this.meals = meals;
     }
 
