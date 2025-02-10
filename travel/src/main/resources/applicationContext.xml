@@ -6,10 +6,10 @@
        http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd"
 >
 
-    <bean id="travel" class="travel.Travel" scope="prototype">
-        <property name="name" ref="travelName"/>
+    <bean id="travel" class="travel.Travel" scope="prototype" autowire="byName" >
+       <!-- <property name="name" ref="travelName"/>
         <property name="transportation" ref="transportation"/>
-        <property name="accomodation" ref="accomodation"/>
+        <property name="accomodation" ref="accomodation"/>-->
     </bean>
 
     <bean id="travelName" class="java.lang.String">
@@ -19,14 +19,14 @@
     <bean id="transportation" class="travel.impl.Bus">
     </bean>
 
-    <bean id="accomodation" class="travel.impl.Hotel">
-        <property name="meals" ref="meals"/>
+    <bean id="accomodation" class="travel.impl.Hotel" autowire="byName">
+      <!--  <property name="meals" ref="meals"/>-->
     </bean>
 
-    <bean id="mealsFromKitchen" class="travel.impl.Kitchen">
+    <bean id="meals" class="travel.impl.Kitchen">
     </bean>
 
-    <util:list id="meals">
+    <util:list id="mealsFromUtils">
         <value>gazpacho</value>
         <value>paella</value>
     </util:list>
