@@ -6,7 +6,7 @@
        http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd"
 >
 
-    <bean id="travel" class="travel.Travel" lazy-init="true">
+    <bean id="travel" class="travel.Travel" scope="prototype">
         <property name="name" ref="travelName"/>
         <property name="transportation" ref="transportation"/>
         <property name="accomodation" ref="accomodation"/>
