@@ -18,9 +18,9 @@
         <property name="accomodation" ref="accomodation"/>&ndash;&gt;
     </bean>-->
 
-    <bean id="travelName" class="java.lang.String">
+<!--    <bean id="travelName2" class="java.lang.String">
         <constructor-arg value="Travel 2025" type="java.lang.String"/>
-    </bean>
+    </bean>-->
 
 <!--    <bean id="transportation" class="travel.impl.Bus">
     </bean>-->
@@ -29,12 +29,12 @@
       &lt;!&ndash;  <property name="meals" ref="meals"/>&ndash;&gt;
     </bean>-->
 
-    <bean id="meals" class="travel.impl.Kitchen">
-    </bean>
+   <!-- <bean id="meals" class="travel.impl.Kitchen">
+    </bean>-->
 
-    <util:list id="mealsFromUtils">
+  <!--  <util:list id="mealsFromUtils">
         <value>gazpacho</value>
         <value>paella</value>
-    </util:list>
+    </util:list>-->
 
 </beans>

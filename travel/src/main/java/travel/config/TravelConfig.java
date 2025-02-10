@@ -1,0 +1,30 @@
+package travel.config;
+
+import org.springframework.beans.factory.FactoryBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import travel.impl.Kitchen;
+
+import java.util.List;
+
+@Configuration
+public class TravelConfig {
+
+    @Bean
+    String travelName(){
+        return "Summer Holiday 2025";
+    }
+
+    @Bean
+    List<String> mealsOfList(){
+        return List.of("ramen", "sushi", "sake");
+    }
+
+    @Bean
+    FactoryBean<List<String>> meals(){
+        return new Kitchen();
+    }
+
+
+
+}

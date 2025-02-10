@@ -10,7 +10,7 @@ import travel.Person;
 
 import java.util.List;
 
-@Component("accomodation")
+@Component
 public class Hotel implements Accomodation {
 
     @Autowired

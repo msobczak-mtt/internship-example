@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import travel.Person;
 import travel.Transportation;
 
-@Component("transportation")
+@Component
 public class Bus implements Transportation {
     @Override
     public void transport(Person p) {
