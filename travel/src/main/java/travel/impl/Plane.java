@@ -1,8 +1,12 @@
 package travel.impl;
 
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
 import travel.Person;
 import travel.Transportation;
 
+@Component
+@Primary
 public class Plane implements Transportation {
 
     @Override
