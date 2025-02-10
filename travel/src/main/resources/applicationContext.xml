@@ -3,9 +3,10 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
+       http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd"
+>
 
-    <bean id="travel" class="travel.Travel">
+    <bean id="travel" class="travel.Travel" lazy-init="true">
         <property name="name" ref="travelName"/>
         <property name="transportation" ref="transportation"/>
         <property name="accomodation" ref="accomodation"/>
