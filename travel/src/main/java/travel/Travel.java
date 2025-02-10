@@ -10,6 +10,7 @@ public class Travel {
     private Transportation transportation;
     private Accomodation accomodation;
 
+    //@Autowired
     public Travel(String name, Transportation transportation, Accomodation accomodation) {
         this.transportation = transportation;
         this.accomodation = accomodation;
@@ -17,21 +18,18 @@ public class Travel {
         System.out.println("constructing travel object using parametrized constructor...");
     }
 
-    public Travel() {
+   /* public Travel() {
         System.out.println("constructing travel object using default constructor...");
-    }
+    }*/
 
-    @Autowired
     public void setName(String name) {
         this.name = name;
     }
 
-    @Autowired
     public void setTransportation(Transportation transportation) {
         this.transportation = transportation;
     }
 
-    @Autowired
     public void setAccomodation(Accomodation accomodation) {
         this.accomodation = accomodation;
     }
