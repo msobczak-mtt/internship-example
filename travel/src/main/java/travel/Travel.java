@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class Travel {
 
-    private String name;
-    private Transportation transportation;
-    private Accomodation accomodation;
+    private final String name;
+    private final Transportation transportation;
+    private final Accomodation accomodation;
 
     //@Autowired
     public Travel(String name, Transportation transportation, Accomodation accomodation) {
@@ -22,17 +22,6 @@ public class Travel {
         System.out.println("constructing travel object using default constructor...");
     }*/
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setTransportation(Transportation transportation) {
-        this.transportation = transportation;
-    }
-
-    public void setAccomodation(Accomodation accomodation) {
-        this.accomodation = accomodation;
-    }
 
     public void travel(Person p){
         System.out.println("started travel '" + name + "' for a person " + p);
