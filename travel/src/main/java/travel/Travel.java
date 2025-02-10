@@ -1,9 +1,12 @@
 package travel;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.springframework.stereotype.Component;
 
 @Component
+@ToString
+@RequiredArgsConstructor
 public class Travel {
 
     private final String name;
@@ -11,12 +14,12 @@ public class Travel {
     private final Accomodation accomodation;
 
     //@Autowired
-    public Travel(String name, Transportation transportation, Accomodation accomodation) {
+  /*  public Travel(String name, Transportation transportation, Accomodation accomodation) {
         this.transportation = transportation;
         this.accomodation = accomodation;
         this.name = name;
         System.out.println("constructing travel object using parametrized constructor...");
-    }
+    }*/
 
    /* public Travel() {
         System.out.println("constructing travel object using default constructor...");
@@ -30,12 +33,12 @@ public class Travel {
         transportation.transport(p);
     }
 
-    @Override
+   /* @Override
     public String toString() {
         return "Travel{" +
                 "name='" + name + '\'' +
                 ", transportation=" + transportation +
                 ", accomodation=" + accomodation +
                 '}';
-    }
+    }*/
 }

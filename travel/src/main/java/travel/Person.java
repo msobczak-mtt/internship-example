@@ -1,18 +1,24 @@
 package travel;
 
+import lombok.*;
+
+//@ToString(exclude = "ticket")
+//@Getter
+//@RequiredArgsConstructor
+@Value
 public class Person {
 
-    private final String firstName;
-    private final String lastName;
-    private final Ticket ticket;
+    String firstName;
+    String lastName;
+    Ticket ticket;
 
-    public Person(String firstName, String lastName, Ticket ticket) {
+ /*   public Person(String firstName, String lastName, Ticket ticket) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.ticket = ticket;
-    }
+    }*/
 
-    public String getFirstName() {
+   /* public String getFirstName() {
         return firstName;
     }
 
@@ -23,12 +29,12 @@ public class Person {
     public Ticket getTicket() {
         return ticket;
     }
-
-    @Override
+*/
+    /*@Override
     public String toString() {
         return "Person{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 '}';
-    }
+    }*/
 }
