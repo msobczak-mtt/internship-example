@@ -1,6 +1,6 @@
 package vod.repository.mem;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import vod.model.Cinema;
 import vod.model.Movie;
 import vod.repository.CinemaDao;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Component
+@Repository
 public class MemCinemaDao implements CinemaDao {
 
     static List<Cinema> cinemas = new ArrayList<>();
