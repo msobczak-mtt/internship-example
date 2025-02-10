@@ -1,6 +1,5 @@
 package travel.config;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,7 +11,6 @@ import java.util.List;
 
 @Configuration
 @ComponentScan("travel")
-@Slf4j
 public class TravelConfig {
 
     @Bean
