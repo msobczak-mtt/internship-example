@@ -1,6 +1,8 @@
 package travel;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import travel.config.TravelConfig;
 import travel.impl.Bus;
 import travel.impl.Hotel;
 
@@ -24,7 +26,8 @@ public class TravelMain {
         travel.setTransportation(transportation);
         travel.setAccomodation(accomodation);*/
 
-        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        ApplicationContext context = new AnnotationConfigApplicationContext(TravelConfig.class);
+                //new ClassPathXmlApplicationContext("applicationContext.xml.bak");
         Travel travel = (Travel)context.getBean("travel");
 
         // service use

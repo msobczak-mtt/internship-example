@@ -2,12 +2,14 @@ package travel.config;
 
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import travel.impl.Kitchen;
 
 import java.util.List;
 
 @Configuration
+@ComponentScan("travel")
 public class TravelConfig {
 
     @Bean
