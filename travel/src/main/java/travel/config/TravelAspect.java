@@ -4,6 +4,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
+import travel.Person;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -15,6 +16,9 @@ public class TravelAspect {
 
     @Pointcut("execution(public * travel.impl..*(..))")
     void allPublicInImpl(){}
+
+    @Pointcut("execution(public * *(travel.Person))")
+    void allAcceptingPerson(){}
 
     @Before("allPublicInImpl()")
     void logEnteringMethod(JoinPoint joinPoint) {
@@ -28,8 +32,11 @@ public class TravelAspect {
                 + " on " + joinPoint.getTarget().getClass().getName() + " with " + Arrays.toString(joinPoint.getArgs()));
     }
 
-    @Around("allPublicInImpl()")
+    @Around("allAcceptingPerson()")
     Object measureExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
+
+        Person person = (Person) joinPoint.getArgs()[0];
+        System.out.println("[TRACE] About to measure execution time of a method having person: " + person);
 
         Instant startTime = Instant.now();
         Object result = joinPoint.proceed(joinPoint.getArgs());
