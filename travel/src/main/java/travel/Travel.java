@@ -3,6 +3,7 @@ package travel;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import travel.config.Cheap;
@@ -18,8 +19,8 @@ public class Travel {
     private final Accomodation accomodation;
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    //@Autowired
-    public Travel(String name, @Cheap(true) Transportation transportation, Accomodation accomodation, ApplicationEventPublisher applicationEventPublisher) {
+    //@Autowired "${travel.name:secret travel}" Spring expression language = SpEL
+    public Travel(@Value("#{'${travel.name:secret travel}'.toUpperCase()}") String name, @Cheap(true) Transportation transportation, Accomodation accomodation, ApplicationEventPublisher applicationEventPublisher) {
         this.transportation = transportation;
         this.accomodation = accomodation;
         this.name = name;
