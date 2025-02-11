@@ -10,7 +10,7 @@ import java.util.List;
 
 @Configuration
 @ComponentScan("travel")
-@PropertySource("classpath:/travel/travel.properties")
+// @PropertySource("classpath:/application.properties")
 @EnableAspectJAutoProxy
 public class TravelConfig {
 

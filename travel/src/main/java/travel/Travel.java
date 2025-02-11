@@ -40,7 +40,7 @@ public class Travel {
         applicationEventPublisher.publishEvent(new TravelStartedEvent(this, p));
         transportation.transport(p);
 
-        p.setTicket(null);
+        //p.setTicket(null);
 
         accomodation.host(p);
         transportation.transport(p);
