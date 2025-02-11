@@ -1,12 +1,12 @@
 package travel.config;
 
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.env.Environment;
 import travel.Transportation;
 import travel.impl.Kitchen;
 
@@ -23,8 +23,8 @@ public class TravelConfig {
     }
 
     @Bean
-    List<String> meals(Environment environment){
-        return List.of("ramen", "sushi", "sake", environment.getProperty("meals.gratis"));
+    List<String> meals(@Value("${meals.gratis:water}") String mealsGratis){
+        return List.of("ramen", "sushi", "sake", mealsGratis);
     }
 
     @Bean
