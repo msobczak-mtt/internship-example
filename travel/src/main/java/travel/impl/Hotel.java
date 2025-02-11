@@ -2,6 +2,7 @@ package travel.impl;
 
 
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,11 @@ public class Hotel implements Accomodation {
     @PostConstruct
     void postConstruct(){
         System.out.println("Hotel constructed. Meals: " + meals);
+    }
+
+    @PreDestroy
+    void preDestroy(){
+        System.out.println("Destroying hotel bean");
     }
 
 }

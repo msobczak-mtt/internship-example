@@ -1,5 +1,6 @@
 package travel;
 
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import travel.config.TravelConfig;
@@ -16,22 +17,15 @@ public class TravelMain {
 
         Person doe = new Person("Joe", "Doe", new Ticket(LocalDate.now()));
 
-        // service preparation
-  /*      Transportation transportation = new Bus();
-        Accomodation accomodation = new Hotel();
-        String travelName = "Holiday 2023";
+        // try-with-resources
+        try(ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(TravelConfig.class);) {
 
-        Travel travel = new Travel();
-        travel.setName(travelName);
-        travel.setTransportation(transportation);
-        travel.setAccomodation(accomodation);*/
+            Travel travel = (Travel) context.getBean("travel");
 
-        ApplicationContext context = new AnnotationConfigApplicationContext(TravelConfig.class);
-                //new ClassPathXmlApplicationContext("applicationContext.xml.bak");
-        Travel travel = (Travel)context.getBean("travel");
+            // service use
+            travel.travel(doe);
+        }
 
-        // service use
-        travel.travel(doe);
 
         System.out.println("done.");
     }
