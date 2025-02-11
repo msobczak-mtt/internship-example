@@ -2,10 +2,7 @@ package travel.config;
 
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.context.event.EventListener;
 import travel.Transportation;
 import travel.impl.Kitchen;
@@ -15,6 +12,7 @@ import java.util.List;
 @Configuration
 @ComponentScan("travel")
 @PropertySource("classpath:/travel/travel.properties")
+@EnableAspectJAutoProxy
 public class TravelConfig {
 
     @Bean
