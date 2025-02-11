@@ -1,6 +1,7 @@
 package travel.impl;
 
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -24,4 +25,10 @@ public class Hotel implements Accomodation {
     public void host(Person p) {
         System.out.println("person " + p + " is being hosted in hotel. meal: " + meals);
     }
+
+    @PostConstruct
+    void postConstruct(){
+        System.out.println("Hotel constructed. Meals: " + meals);
+    }
+
 }
