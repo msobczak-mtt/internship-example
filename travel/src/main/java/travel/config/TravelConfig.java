@@ -4,6 +4,7 @@ import org.springframework.beans.factory.FactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.EventListener;
 import travel.Transportation;
 import travel.impl.Kitchen;
 
@@ -33,6 +34,10 @@ public class TravelConfig {
         return passenger -> System.out.println("teleporting passenger " + passenger);
     }
 
+    @EventListener(TravelEvent.class)
+    void onTravelEvent(TravelEvent travelEvent){
+        System.out.println("[annotated method] Travel event: " + travelEvent);
+    }
 
 
 }

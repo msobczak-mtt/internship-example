@@ -3,7 +3,7 @@ package travel.config;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class TravelEventListener implements ApplicationListener<TravelEvent> {
 
     @Override
