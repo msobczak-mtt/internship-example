@@ -15,7 +15,7 @@ public class Travel {
     private final Accomodation accomodation;
 
     //@Autowired
-    public Travel(String name, @Cheap Transportation transportation, Accomodation accomodation) {
+    public Travel(String name, @Cheap(true) Transportation transportation, Accomodation accomodation) {
         this.transportation = transportation;
         this.accomodation = accomodation;
         this.name = name;

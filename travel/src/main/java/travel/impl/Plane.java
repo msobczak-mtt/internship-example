@@ -4,9 +4,11 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import travel.Person;
 import travel.Transportation;
+import travel.config.Cheap;
 
 @Component
 @Primary
+@Cheap(value = false)
 public class Plane implements Transportation {
 
     @Override

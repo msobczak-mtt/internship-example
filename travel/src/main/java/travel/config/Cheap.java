@@ -11,4 +11,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Qualifier
 public @interface Cheap {
+
+    boolean value() default true;
+
 }
