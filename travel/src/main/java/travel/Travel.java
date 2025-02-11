@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import travel.config.Cheap;
 
 @Component
 @ToString
@@ -14,7 +15,7 @@ public class Travel {
     private final Accomodation accomodation;
 
     //@Autowired
-    public Travel(String name, @Qualifier("cheap") Transportation transportation, Accomodation accomodation) {
+    public Travel(String name, @Cheap Transportation transportation, Accomodation accomodation) {
         this.transportation = transportation;
         this.accomodation = accomodation;
         this.name = name;
