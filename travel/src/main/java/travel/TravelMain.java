@@ -15,7 +15,8 @@ public class TravelMain {
 
     public static void main(String[] args) {
 
-        Person doe = new Person("Joe", "Doe", new Ticket(LocalDate.now()));
+        Person doe = new Person("Joe", "Doe");
+        doe.setTicket(new Ticket(LocalDate.now().plusDays(0)));
 
         // try-with-resources
         try(ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(TravelConfig.class);) {

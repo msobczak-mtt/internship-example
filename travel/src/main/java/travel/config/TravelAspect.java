@@ -5,10 +5,13 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 import travel.Person;
+import travel.Ticket;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Objects;
 
 @Component
 @Aspect
@@ -44,6 +47,19 @@ public class TravelAspect {
         System.out.println("[TRACE] Execution time of " + joinPoint.toLongString() + " is " + Duration.between(startTime, endTime));
 
         return result;
+    }
+
+    @Before("allAcceptingPerson()")
+    void checkTicket(JoinPoint joinPoint) {
+        Person person = (Person) joinPoint.getArgs()[0];
+        System.out.println("[checkTicket]: " + person.toString() + " in " + joinPoint.getTarget().getClass().getName());
+        Ticket ticket = person.getTicket();
+        if (Objects.isNull(ticket)) {
+            throw new RuntimeException("Ticket is null");
+        }
+        if (!LocalDate.now().equals(ticket.getValid())) {
+            throw new RuntimeException("Ticket is not valid");
+        }
     }
 
 }

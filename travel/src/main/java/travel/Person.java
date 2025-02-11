@@ -5,12 +5,12 @@ import lombok.*;
 //@ToString(exclude = "ticket")
 //@Getter
 //@RequiredArgsConstructor
-@Value
+@Data
 public class Person {
 
-    String firstName;
-    String lastName;
-    Ticket ticket;
+    private final String firstName;
+    private final String lastName;
+    private Ticket ticket;
 
  /*   public Person(String firstName, String lastName, Ticket ticket) {
         this.firstName = firstName;

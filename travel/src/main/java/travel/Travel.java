@@ -39,6 +39,9 @@ public class Travel {
         System.out.println("started travel '" + name + "' for a person " + p);
         applicationEventPublisher.publishEvent(new TravelStartedEvent(this, p));
         transportation.transport(p);
+
+        p.setTicket(null);
+
         accomodation.host(p);
         transportation.transport(p);
         applicationEventPublisher.publishEvent(new TravelFinishedEvent(this, p));
