@@ -32,7 +32,7 @@ public class TravelAspect {
                 + " on " + joinPoint.getTarget().getClass().getName() + " with " + Arrays.toString(joinPoint.getArgs()));
     }
 
-    @Around("allAcceptingPerson()")
+    @Around("@annotation(travel.config.ExecutionTime) || allPublicInImpl()")
     Object measureExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
 
         Person person = (Person) joinPoint.getArgs()[0];

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import travel.config.Cheap;
+import travel.config.ExecutionTime;
 import travel.config.TravelFinishedEvent;
 import travel.config.TravelStartedEvent;
 
@@ -33,6 +34,7 @@ public class Travel {
     }*/
 
 
+    @ExecutionTime
     public void travel(Person p){
         System.out.println("started travel '" + name + "' for a person " + p);
         applicationEventPublisher.publishEvent(new TravelStartedEvent(this, p));

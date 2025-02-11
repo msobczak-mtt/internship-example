@@ -1,4 +1,4 @@
-package travel.impl;
+package travel.config;
 
 import org.springframework.beans.factory.FactoryBean;
 
