@@ -48,4 +48,10 @@ Accept-Language: pl
 GET http://localhost:8080/directors
 
 
+###
+GET http://localhost:8080/actuator/info
+
+###
+POST http://localhost:8080/actuator/shutdown
+
 
