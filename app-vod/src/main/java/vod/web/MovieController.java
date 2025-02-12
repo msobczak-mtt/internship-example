@@ -2,8 +2,10 @@ package vod.web;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import vod.model.Cinema;
 import vod.model.Movie;
 import vod.service.CinemaService;
@@ -11,7 +13,9 @@ import vod.service.MovieService;
 import vod.web.dto.MovieDto;
 import vod.web.dto.MovieMapper;
 
+import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -47,7 +51,7 @@ public class MovieController {
     }
 
     @PostMapping("/movies")
-    public MovieDto addMovie(@RequestBody MovieDto movieDto) {
+    public ResponseEntity<MovieDto> addMovie(@RequestBody MovieDto movieDto) {
         log.info("About to add movie: {}", movieDto);
 
         // TODO validation
@@ -59,6 +63,10 @@ public class MovieController {
         // TODO response preparation
         movieDto = movieMapper.toDto(movie);
 
-        return movieDto;
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
+                .path("/{id}")
+                .build(Map.of( "id", movie.getId()));
+
+        return ResponseEntity.created(uri).body(movieDto);
     }
 }
