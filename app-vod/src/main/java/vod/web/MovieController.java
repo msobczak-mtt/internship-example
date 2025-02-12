@@ -66,11 +66,6 @@ public class MovieController {
         return ResponseEntity.created(uri).body(movieMapper.toDto(movie));
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    ResponseEntity<?> handleMethodArgumentNotValid(MethodArgumentNotValidException exception) {
-        log.error("argument not valid exception", exception);
 
-        return ResponseEntity.badRequest().body(exception.getAllErrors());
-    }
 
 }
