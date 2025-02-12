@@ -1,0 +1,13 @@
+###
+GET http://localhost:8080/cinemas
+
+###
+GET http://localhost:8080/cinemas?movieId=1
+
+###
+GET http://localhost:8080/movies/1/cinemas
+
+###
+GET http://localhost:8080/cinemas/1
+
+
