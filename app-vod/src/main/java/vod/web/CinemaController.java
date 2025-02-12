@@ -16,6 +16,7 @@ import vod.web.dto.CinemaDto;
 import vod.web.dto.CinemaMapper;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -47,15 +48,19 @@ public class CinemaController {
     ResponseEntity<CinemaDto> getCinema(@PathVariable("cinemaId") int cinemaId) {
         log.info("about to retrieve cinema {}", cinemaId);
         Cinema cinema = cinemaService.getCinemaById(cinemaId);
-        if (cinema != null) {
+
+        return ResponseEntity.of(Optional.ofNullable(cinema).map(cinemaMapper::toDto));
+
+       /* if (cinema != null) {
             return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(cinemaMapper.toDto(cinema));
+                    //.status(HttpStatus.OK)
+                    .ok(cinemaMapper.toDto(cinema));
         } else {
             return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
+                    .notFound()
+                    //.status(HttpStatus.NOT_FOUND)
                     .build();
-        }
+        }*/
     }
 
     @GetMapping("/movies/{movieId}/cinemas")
