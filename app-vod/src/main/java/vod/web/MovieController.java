@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vod.model.Cinema;
+import vod.model.Movie;
 import vod.service.CinemaService;
 import vod.service.MovieService;
 import vod.web.dto.MovieDto;
@@ -52,8 +53,11 @@ public class MovieController {
         // TODO validation
 
         // TODO service call
+        Movie movie = movieMapper.fromDto(movieDto);
+        movie = movieService.addMovie(movie);
 
         // TODO response preparation
+        movieDto = movieMapper.toDto(movie);
 
         return movieDto;
     }
