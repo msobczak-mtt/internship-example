@@ -2,6 +2,9 @@ package vod.web;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,10 +34,18 @@ public class CinemaController {
     }
 
     @GetMapping("/cinemas/{cinemaId}")
-    CinemaDto getCinema(@PathVariable("cinemaId") int cinemaId){
+    ResponseEntity<CinemaDto> getCinema(@PathVariable("cinemaId") int cinemaId){
         log.info("about to retrieve cinema {}", cinemaId);
         Cinema cinema = cinemaService.getCinemaById(cinemaId);
-        return cinemaMapper.toDto(cinema);
+        if(cinema != null) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(cinemaMapper.toDto(cinema));
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .build();
+        }
     }
 
 }
