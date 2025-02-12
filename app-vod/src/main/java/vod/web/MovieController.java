@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import vod.model.Cinema;
@@ -51,22 +53,20 @@ public class MovieController {
     }
 
     @PostMapping("/movies")
-    public ResponseEntity<MovieDto> addMovie(@RequestBody MovieDto movieDto) {
+    public ResponseEntity<?> addMovie(@RequestBody @Validated MovieDto movieDto, Errors errors) {
         log.info("About to add movie: {}", movieDto);
 
         // TODO validation
+        if(errors.hasErrors()) {
+            return ResponseEntity.badRequest().body(errors.getAllErrors());
+        }
 
-        // TODO service call
-        Movie movie = movieMapper.fromDto(movieDto);
-        movie = movieService.addMovie(movie);
-
-        // TODO response preparation
-        movieDto = movieMapper.toDto(movie);
+        Movie movie = movieService.addMovie(movieMapper.fromDto(movieDto));
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
                 .path("/{id}")
                 .build(Map.of( "id", movie.getId()));
 
-        return ResponseEntity.created(uri).body(movieDto);
+        return ResponseEntity.created(uri).body(movieMapper.toDto(movie));
     }
 }
