@@ -3,9 +3,7 @@ package vod.web;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import vod.model.Cinema;
 import vod.service.CinemaService;
 import vod.service.MovieService;
@@ -45,5 +43,18 @@ public class MovieController {
         return cinemaService.getMoviesInCinema(cinema).stream()
                 .map(movieMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @PostMapping("/movies")
+    public MovieDto addMovie(@RequestBody MovieDto movieDto) {
+        log.info("About to add movie: {}", movieDto);
+
+        // TODO validation
+
+        // TODO service call
+
+        // TODO response preparation
+
+        return movieDto;
     }
 }
