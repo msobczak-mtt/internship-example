@@ -1,6 +1,5 @@
 package vod.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +13,6 @@ public class Cinema {
     private int id;
     private String name;
     private String logo;
-    @JsonIgnore
     private List<Movie> movies = new ArrayList<>();
 
     public Cinema(int id, String name, String logo) {

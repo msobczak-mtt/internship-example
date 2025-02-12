@@ -6,8 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vod.model.Cinema;
 import vod.service.CinemaService;
+import vod.web.dto.CinemaDto;
+import vod.web.dto.CinemaMapper;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,13 +18,15 @@ import java.util.List;
 public class CinemaController {
 
     private final CinemaService cinemaService;
+    private final CinemaMapper cinemaMapper;
 
     @GetMapping("/cinemas")
-    List<Cinema> getCinemas() {
+    List<CinemaDto> getCinemas() {
         log.info("about to retrieve cinemas");
         List<Cinema> cinemas = cinemaService.getAllCinemas();
-
-        return cinemas;
+        return cinemas.stream()
+                .map(cinemaMapper::toDto)
+                .collect(Collectors.toList());
     }
 
 }
