@@ -18,7 +18,7 @@ OPTIONS http://localhost:8080/movies
 HEAD http://localhost:8080/movies
 
 ###
-GET http://localhost:8080/movies/1
+GET http://localhost:8080/movies/11
 
 ###
 GET http://localhost:8080/cinemas/1/movies
@@ -26,11 +26,12 @@ GET http://localhost:8080/cinemas/1/movies
 ###
 POST http://localhost:8080/movies
 Content-Type: application/json
+Accept-Language: it
 
 {
-  "title": "Batman",
+  "title": "B",
   "poster": "http://gapla.fn.org.pl/public/cache/P21829-483x700.jpg",
-  "directorId": 3
+  "directorId": -3
 }
 
 
