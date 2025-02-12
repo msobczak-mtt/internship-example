@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import vod.model.Cinema;
@@ -53,13 +54,8 @@ public class MovieController {
     }
 
     @PostMapping("/movies")
-    public ResponseEntity<?> addMovie(@RequestBody @Validated MovieDto movieDto, Errors errors) {
+    public ResponseEntity<MovieDto> addMovie(@RequestBody @Validated MovieDto movieDto) {
         log.info("About to add movie: {}", movieDto);
-
-        // TODO validation
-        if(errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(errors.getAllErrors());
-        }
 
         Movie movie = movieService.addMovie(movieMapper.fromDto(movieDto));
 
@@ -69,4 +65,12 @@ public class MovieController {
 
         return ResponseEntity.created(uri).body(movieMapper.toDto(movie));
     }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    ResponseEntity<?> handleMethodArgumentNotValid(MethodArgumentNotValidException exception) {
+        log.error("argument not valid exception", exception);
+
+        return ResponseEntity.badRequest().body(exception.getAllErrors());
+    }
+
 }
