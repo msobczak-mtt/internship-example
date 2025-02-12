@@ -31,7 +31,7 @@ Accept-Language: it
 {
   "title": "B",
   "poster": "http://gapla.fn.org.pl/public/cache/P21829-483x700.jpg",
-  "directorId": -3
+  "directorId": 3
 }
 
 ###
@@ -43,6 +43,9 @@ Accept-Language: pl
   "firstName": "John",
   "lastName": "Smith"
 }
+
+###
+GET http://localhost:8080/directors
 
 
 
