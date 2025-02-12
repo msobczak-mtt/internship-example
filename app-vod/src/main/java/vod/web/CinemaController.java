@@ -58,4 +58,16 @@ public class CinemaController {
         }
     }
 
+    @GetMapping("/movies/{movieId}/cinemas")
+    List<CinemaDto> getCinemasShowingMovie(@PathVariable("movieId") int movieId) {
+        log.info("about to retrieve cinemas showing movie {}", movieId);
+        Movie movie = movieService.getMovieById(movieId);
+
+        List<Cinema> cinemas = cinemaService.getCinemasByMovie(movie);
+
+        return cinemas.stream()
+                .map(cinemaMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
 }
