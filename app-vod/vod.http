@@ -1,5 +1,6 @@
 ###
 GET http://localhost:8080/cinemas
+Accept: application/xml
 
 ###
 GET http://localhost:8080/cinemas?movieId=1
