@@ -34,5 +34,15 @@ Accept-Language: it
   "directorId": -3
 }
 
+###
+POST http://localhost:8080/directors
+Content-Type: application/json
+Accept-Language: pl
+
+{
+  "firstName": "John",
+  "lastName": "Smith"
+}
+
 
 
