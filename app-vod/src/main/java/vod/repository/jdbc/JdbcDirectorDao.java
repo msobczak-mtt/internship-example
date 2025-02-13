@@ -4,10 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import vod.model.Director;
 import vod.repository.DirectorDao;
 
+import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +38,18 @@ public class JdbcDirectorDao implements DirectorDao {
 
     @Override
     public Director save(Director d) {
-        return null;
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection->{
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO DIRECTOR(FIRSTNAME,LASTNAME) VALUES(?,?)", new String[]{"id"});
+            ps.setString(1, d.getFirstName());
+            ps.setString(2, d.getLastName());
+            return ps;
+        }, keyHolder);
+
+        d.setId(keyHolder.getKey().intValue());
+
+        return d;
     }
 
     static class DirectorMapper implements RowMapper<Director> {
