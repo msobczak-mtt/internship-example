@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import vod.repository.CinemaDao;
 import vod.repository.DirectorDao;
 import vod.repository.MovieDao;
@@ -22,6 +25,7 @@ public class MovieServiceBean implements MovieService {
     private final DirectorDao directorDao;
     private final CinemaDao cinemaDao;
     private final MovieDao movieDao;
+    private final PlatformTransactionManager transactionManager;
 
     public List<Movie> getAllMovies() {
         log.info("searching all movies...");
@@ -71,7 +75,24 @@ public class MovieServiceBean implements MovieService {
     @Override
     public Movie addMovie(Movie m) {
         log.info("about to add movie " + m);
-        return movieDao.save(m);
+
+        TransactionStatus ts = transactionManager.getTransaction(new DefaultTransactionDefinition());
+        try {
+            // op1
+            m = movieDao.save(m);
+
+            // op2
+            if (m.getTitle().equals("Boom")) {
+                throw new RuntimeException("Boom");
+            }
+
+            transactionManager.commit(ts);
+        }catch (RuntimeException e) {
+            transactionManager.rollback(ts);
+            throw e;
+        }
+
+        return m;
     }
 
     @Override
