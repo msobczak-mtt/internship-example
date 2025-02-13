@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 @ConditionalOnProperty(value = "vod.dao", havingValue = "mem")
-public class MemDirectorDao implements DirectorDao {
+public abstract class MemDirectorDao implements DirectorDao {
 
     static List<Director> directors = new ArrayList<>();
 

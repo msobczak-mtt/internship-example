@@ -16,7 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @ConditionalOnProperty(value = "vod.dao", havingValue = "jpa")
 @Slf4j
-public class JpaCinemaDao implements CinemaDao {
+public abstract class JpaCinemaDao implements CinemaDao {
 
     private final EntityManager em;
 

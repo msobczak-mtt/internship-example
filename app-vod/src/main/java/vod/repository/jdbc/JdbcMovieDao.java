@@ -22,7 +22,7 @@ import java.util.Optional;
 @Repository
 @ConditionalOnProperty(value = "vod.dao", havingValue = "jdbc")
 @RequiredArgsConstructor
-public class JdbcMovieDao implements MovieDao {
+public abstract class JdbcMovieDao implements MovieDao {
 
     private static final String SELECT_ALL_MOVIES = "select m.id as movie_id, " +
             "m.title as movie_title, m.poster as movie_poster, m.director_id as movie_director_id from movie m";

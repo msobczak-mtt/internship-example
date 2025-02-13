@@ -17,7 +17,7 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 @ConditionalOnProperty(value = "vod.dao", havingValue = "jdbc")
-public class JdbcCinemaDao implements CinemaDao {
+public abstract class JdbcCinemaDao implements CinemaDao {
 
     private static final String SELECT_ALL_CINEMAS = "select c.id as cinema_id, " +
             "c.name as cinema_name, c.logo as cinema_logo from cinema c";

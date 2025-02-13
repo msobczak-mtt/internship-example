@@ -15,7 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @ConditionalOnProperty(value = "vod.dao", havingValue = "jpa")
 @Slf4j
-public class JpaDirectorDao implements DirectorDao {
+public abstract class JpaDirectorDao implements DirectorDao {
 
     private final EntityManager em;
 

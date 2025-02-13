@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Repository
 @ConditionalOnProperty(value = "vod.dao", havingValue = "mem")
-public class MemMovieDao implements MovieDao {
+public abstract class MemMovieDao implements MovieDao {
 
     static List<Movie> movies = new ArrayList<>();
 

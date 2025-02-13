@@ -17,7 +17,7 @@ import java.util.Optional;
 @Repository
 @ConditionalOnProperty(value = "vod.dao", havingValue = "jdbc")
 @RequiredArgsConstructor
-public class JdbcDirectorDao implements DirectorDao {
+public abstract class JdbcDirectorDao implements DirectorDao {
 
     private static final String SELECT_ALL_DIRECTORS = "select d.id as director_id, d.firstname as director_first_name, d.lastname as director_last_name from director d";
 
