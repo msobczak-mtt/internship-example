@@ -1,0 +1,11 @@
+###
+GET http://localhost:9090/ratings?movieId=4
+
+###
+POST http://localhost:9090/ratings
+Content-Type: application/json
+
+{
+  "rate": 5,
+  "movieId": 4
+}
