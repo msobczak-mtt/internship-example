@@ -1,8 +1,18 @@
 package vod.config;
 
-import org.springframework.context.annotation.ComponentScan;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class VodConfig {
+@RequiredArgsConstructor
+public class VodConfig implements WebMvcConfigurer {
+
+    private final TimeWindowInterceptor timeWindowInterceptor;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(timeWindowInterceptor).addPathPatterns("/**").excludePathPatterns("/directors/**");
+    }
 }
