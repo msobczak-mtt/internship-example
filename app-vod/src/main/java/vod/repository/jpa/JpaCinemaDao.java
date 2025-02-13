@@ -23,7 +23,7 @@ public class JpaCinemaDao implements CinemaDao {
     @Override
     public List<Cinema> findAll() {
         // SQL -> HQL -> JPQL
-        return em.createQuery("select c from Cinema c").getResultList();
+        return em.createQuery("select c from Cinema c", Cinema.class).getResultList();
     }
 
     @Override
@@ -33,7 +33,7 @@ public class JpaCinemaDao implements CinemaDao {
 
     @Override
     public List<Cinema> findByMovie(Movie m) {
-        return em.createQuery("select c from Cinema c inner join c.movies movie where movie=:movie")
+        return em.createQuery("select c from Cinema c inner join c.movies movie where movie=:movie", Cinema.class)
                 .setParameter("movie", m)
                 .getResultList();
     }
