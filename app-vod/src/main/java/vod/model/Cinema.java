@@ -17,7 +17,7 @@ public class Cinema {
     private int id;
     private String name;
     private String logo;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name="movie_cinema",
             joinColumns = @JoinColumn(name="cinema_id"),
