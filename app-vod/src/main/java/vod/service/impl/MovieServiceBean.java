@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import vod.repository.CinemaDao;
 import vod.repository.DirectorDao;
@@ -73,11 +75,12 @@ public class MovieServiceBean implements MovieService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public Movie addMovie(Movie m) {
         log.info("about to add movie " + m);
 
-        TransactionStatus ts = transactionManager.getTransaction(new DefaultTransactionDefinition());
-        try {
+     /*   TransactionStatus ts = transactionManager.getTransaction(new DefaultTransactionDefinition());
+        try {*/
             // op1
             m = movieDao.save(m);
 
@@ -86,11 +89,11 @@ public class MovieServiceBean implements MovieService {
                 throw new RuntimeException("Boom");
             }
 
-            transactionManager.commit(ts);
+           /* transactionManager.commit(ts);
         }catch (RuntimeException e) {
             transactionManager.rollback(ts);
             throw e;
-        }
+        }*/
 
         return m;
     }

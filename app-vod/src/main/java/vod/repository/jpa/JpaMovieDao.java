@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import vod.model.Cinema;
 import vod.model.Director;
 import vod.model.Movie;
@@ -46,6 +48,7 @@ public class JpaMovieDao implements MovieDao {
     }
 
     @Override
+    @Transactional(propagation = Propagation.MANDATORY)
     public Movie save(Movie m) {
         em.persist(m);
         return m;
