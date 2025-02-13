@@ -1,5 +1,6 @@
 package vod.repository.mem;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import vod.model.Director;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@ConditionalOnProperty(value = "vod.dao", havingValue = "mem")
 public class MemDirectorDao implements DirectorDao {
 
     static List<Director> directors = new ArrayList<>();

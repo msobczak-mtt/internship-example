@@ -1,5 +1,6 @@
 package vod.repository.mem;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import vod.model.Cinema;
@@ -13,6 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
+@ConditionalOnProperty(value = "vod.dao", havingValue = "mem")
 public class MemMovieDao implements MovieDao {
 
     static List<Movie> movies = new ArrayList<>();

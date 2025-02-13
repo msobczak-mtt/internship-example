@@ -1,7 +1,7 @@
 package vod.repository.jdbc;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Primary
+@ConditionalOnProperty(value = "vod.dao", havingValue = "jdbc")
 @RequiredArgsConstructor
 public class JdbcDirectorDao implements DirectorDao {
 
@@ -40,7 +40,7 @@ public class JdbcDirectorDao implements DirectorDao {
     public Director save(Director d) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(connection->{
+        jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO DIRECTOR(FIRSTNAME,LASTNAME) VALUES(?,?)", new String[]{"id"});
             ps.setString(1, d.getFirstName());
             ps.setString(2, d.getLastName());

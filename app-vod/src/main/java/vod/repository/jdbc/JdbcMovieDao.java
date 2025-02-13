@@ -1,9 +1,8 @@
 package vod.repository.jdbc;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -13,7 +12,6 @@ import vod.model.Director;
 import vod.model.Movie;
 import vod.repository.MovieDao;
 
-import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,7 +20,7 @@ import java.util.Optional;
 
 
 @Repository
-@Primary
+@ConditionalOnProperty(value = "vod.dao", havingValue = "jdbc")
 @RequiredArgsConstructor
 public class JdbcMovieDao implements MovieDao {
 
@@ -68,7 +66,7 @@ public class JdbcMovieDao implements MovieDao {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(connection->{
+        jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO MOVIE(TITLE,POSTER,DIRECTOR_ID) VALUES(?,?,?)", new String[]{"id"});
             ps.setString(1, m.getTitle());
             ps.setString(2, m.getPoster());

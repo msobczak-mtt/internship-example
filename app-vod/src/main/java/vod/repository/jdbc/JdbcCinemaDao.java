@@ -1,7 +1,7 @@
 package vod.repository.jdbc;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Primary
 @RequiredArgsConstructor
+@ConditionalOnProperty(value = "vod.dao", havingValue = "jdbc")
 public class JdbcCinemaDao implements CinemaDao {
 
     private static final String SELECT_ALL_CINEMAS = "select c.id as cinema_id, " +
