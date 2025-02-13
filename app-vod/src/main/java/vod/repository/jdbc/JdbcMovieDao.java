@@ -3,7 +3,10 @@ package vod.repository.jdbc;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import vod.model.Cinema;
 import vod.model.Director;
@@ -11,6 +14,7 @@ import vod.model.Movie;
 import vod.repository.MovieDao;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -61,7 +65,21 @@ public class JdbcMovieDao implements MovieDao {
 
     @Override
     public Movie save(Movie m) {
-        return null;
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection->{
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO MOVIE(TITLE,POSTER,DIRECTOR_ID) VALUES(?,?,?)", new String[]{"id"});
+            ps.setString(1, m.getTitle());
+            ps.setString(2, m.getPoster());
+            ps.setInt(3, m.getDirector().getId());
+            return ps;
+        }, keyHolder);
+        //.update("INSERT INTO MOVIE(TITLE,POSTER,DIRECTOR_ID) VALUES(?,?,?)", m.getTitle(), m.getPoster(), m.getDirector().getId());
+
+        m.setId(keyHolder.getKey().intValue());
+
+        return m;
     }
 
 
