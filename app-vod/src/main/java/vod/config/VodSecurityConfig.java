@@ -12,26 +12,24 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableMethodSecurity
 public class VodSecurityConfig {
 
     @Bean
-    UserDetailsService userDetailsService() {
+    UserDetailsService userDetailsService(DataSource dataSource) {
 
-        UserDetails user1 = User.withUsername("user1")
-                .password("user1")
-                .roles("USER")
-                .build();
+        JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager();
+        userDetailsManager.setDataSource(dataSource);
+        userDetailsManager.setUsersByUsernameQuery("select username, password, 'true' from user where username=?");
+        userDetailsManager.setAuthoritiesByUsernameQuery("select username, role from role where username=?");
 
-        UserDetails user2 = User.withUsername("user2")
-                .password("user2")
-                .roles("ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(user1, user2);
+        return userDetailsManager;
     }
 
     @Bean
