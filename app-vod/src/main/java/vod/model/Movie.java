@@ -24,6 +24,7 @@ public class Movie {
     private Director director;
     @ManyToMany(mappedBy = "movies")
     private List<Cinema> cinemas = new ArrayList<>();
+    private double rate;
 
     public Movie(int id, String title, String poster, Director director) {
         this.id = id;
