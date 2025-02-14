@@ -22,6 +22,7 @@ import java.util.Map;
 public class RatingService {
 
     private final RatingRepository ratingRepository;
+    private final NotificationService notificationService;
 
     @Value("${vod.url}")
     private String vodUrl;
@@ -42,6 +43,7 @@ public class RatingService {
         rating = ratingRepository.save(rating);
         log.info("rating persisted.");
 
+        notificationService.notifyOnMovieratingUpdate(rating.getMovieId());
         return rating;
     }
 
