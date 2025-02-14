@@ -1,6 +1,7 @@
 ###
 GET http://localhost:8080/cinemas
 Accept: application/xml
+Authorization: Basic user1 user1
 
 ###
 GET http://localhost:8080/cinemas?movieId=1
@@ -15,7 +16,7 @@ GET http://localhost:8080/cinemas/1
 OPTIONS http://localhost:8080/movies
 
 ###
-HEAD http://localhost:8080/movies
+GET http://localhost:8080/movies
 
 ###
 GET http://localhost:8080/movies/11
@@ -27,9 +28,10 @@ GET http://localhost:8080/cinemas/1/movies
 POST http://localhost:8080/movies
 Content-Type: application/json
 Accept-Language: it
+Authorization: Basic user2 user2
 
 {
-  "title": "B",
+  "title": "Hulk",
   "poster": "http://gapla.fn.org.pl/public/cache/P21829-483x700.jpg",
   "directorId": 3
 }
