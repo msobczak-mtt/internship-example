@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import rating.dao.RatingRepository;
 
@@ -17,6 +19,7 @@ import java.util.concurrent.Future;
 @RequiredArgsConstructor
 @Slf4j
 @EnableAsync
+@EnableScheduling
 public class NotificationService {
 
     private final RatingRepository ratingRepository;
@@ -43,6 +46,13 @@ public class NotificationService {
         log.info("Kafka notification successfully produced {}", ratingEvent);
         return CompletableFuture.completedFuture(averageRating);
     }
+
+    @Scheduled(fixedDelay = 10_000)
+    void checkMostRanks(){
+        long ranksCount = ratingRepository.count();
+        log.info("current ranks count: {}", ranksCount);
+    }
+
 
     @Data
     @Builder
