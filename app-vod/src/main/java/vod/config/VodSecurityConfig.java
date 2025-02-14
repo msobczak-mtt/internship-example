@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +15,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableMethodSecurity
 public class VodSecurityConfig {
 
     @Bean
@@ -43,7 +45,7 @@ public class VodSecurityConfig {
         http.csrf( csrfConfigurer -> csrfConfigurer.disable() );
 
         http.authorizeHttpRequests(registry->registry
-                .requestMatchers(HttpMethod.POST, "/movies").hasRole("ADMIN")
+                //.requestMatchers(HttpMethod.POST, "/movies").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/cinemas").authenticated()
                 .anyRequest().permitAll()
         );
