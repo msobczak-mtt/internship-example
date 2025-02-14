@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +45,18 @@ public class RatingService {
         rating = ratingRepository.save(rating);
         log.info("rating persisted.");
 
-        notificationService.notifyOnMovieratingUpdate(rating.getMovieId());
+        Future<Double> futureRating = notificationService.notifyOnMovieratingUpdate(rating.getMovieId());
+
+
+        try {
+            double ratingValue = futureRating.get();
+            log.info("rating persisted with value {}", ratingValue);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+
         return rating;
     }
 
