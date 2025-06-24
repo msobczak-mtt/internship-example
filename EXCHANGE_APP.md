@@ -4,12 +4,12 @@
 
 Projekt składa się z dwóch mikroserwisów Spring Boot symulujących podstawowy system handlu giełdowego:
 
-1. **app-stock** - aplikacja do zarządzania akcjami i transakcjami
-2. **app-recommendation** - serwis prostych rekomendacji akcji
+1. **stock-app** - aplikacja do zarządzania akcjami i transakcjami
+2. **stock-recommendation** - serwis prostych rekomendacji akcji
 
 ## Architektura
 
-### app-stock (port 8080)
+### stock-app (port 8080)
 
 Główna aplikacja obsługująca handel akcjami.
 
@@ -192,7 +192,7 @@ public class Index {
 - calculateIndexValue() - obliczanie wartości indeksu
 - findIndicesByStock() - znajdowanie indeksów dla akcji
 
-### app-recommendation (port 9090)
+### stock-recommendation (port 9090)
 
 Prosty serwis rekomendacji akcji.
 
@@ -263,18 +263,18 @@ public class Recommendation {
 
 ### Przepływ danych
 
-1. **app-recommendation** publikuje:
+1. **stock-recommendation** publikuje:
    - Nowe rekomendacje do `recommendations-topic`
    - Usunięte rekomendacje do `recommendation-deletions`
 
-2. **app-stock** konsumuje:
+2. **stock-app** konsumuje:
    - Rekomendacje z obu topiców
    - Aktualizuje liczniki rekomendacji dla każdej akcji
    - Przechowuje dane w pamięci (RecommendationCache)
 
 ## Konfiguracja
 
-### application.properties (app-stock)
+### application.properties (stock-app)
 ```properties
 server.port=8080
 spring.datasource.url=jdbc:postgresql://localhost:5432/stock_db
@@ -289,7 +289,7 @@ spring.kafka.consumer.group-id=stock-service
 spring.kafka.consumer.auto-offset-reset=earliest
 ```
 
-### application.properties (app-recommendation)
+### application.properties (stock-recommendation)
 ```properties
 server.port=9090
 spring.data.mongodb.uri=mongodb://admin:admin@localhost:27017/recommendations?authSource=admin
@@ -345,18 +345,18 @@ volumes:
 ### Dzień 1: Struktura i podstawy
 
 **1. Utworzenie projektów (1h)**
-- Stworzenie modułu app-stock
-- Stworzenie modułu app-recommendation
+- Stworzenie modułu stock-app
+- Stworzenie modułu stock-recommendation
 - Konfiguracja pom.xml
 
-**2. Model danych app-stock (2h)**
+**2. Model danych stock-app (2h)**
 - Encja Stock
 - Encja Client
 - Encja Transaction
 - Encja Index z relacją M:N do Stock
 - Konfiguracja JPA i PostgreSQL
 
-**3. Model danych app-recommendation (1h)**
+**3. Model danych stock-recommendation (1h)**
 - Dokument Recommendation
 - Konfiguracja MongoDB
 
@@ -373,13 +373,13 @@ volumes:
 
 ### Dzień 2: Logika biznesowa
 
-**6. Serwisy app-stock (3h)**
+**6. Serwisy stock-app (3h)**
 - StockService
 - ClientService
 - TransactionService z walidacją
 - IndexService z zarządzaniem składem
 
-**7. Serwis app-recommendation (1h)**
+**7. Serwis stock-recommendation (1h)**
 - RecommendationService
 
 **8. Obsługa błędów (2h)**
@@ -393,13 +393,13 @@ volumes:
 
 ### Dzień 3: REST API i Kafka
 
-**10. Kontrolery app-stock (2h)**
+**10. Kontrolery stock-app (2h)**
 - StockController
 - ClientController
 - TransactionController
 - IndexController
 
-**11. Kontroler app-recommendation (1h)**
+**11. Kontroler stock-recommendation (1h)**
 - RecommendationController
 
 **12. DTO i mappery (2h)**
@@ -407,12 +407,12 @@ volumes:
 - Prosty mapper (bez MapStruct)
 
 **13. Konfiguracja Kafka (1h)**
-- Producer w app-recommendation
-- Consumer w app-stock
+- Producer w stock-recommendation
+- Consumer w stock-app
 
 **14. Publikowanie i konsumowanie eventów (2h)**
-- RecommendationEventPublisher w app-recommendation
-- RecommendationConsumer w app-stock
+- RecommendationEventPublisher w stock-recommendation
+- RecommendationConsumer w stock-app
 - RecommendationCache do przechowywania danych
 
 ### Dzień 4: Integracja i prezentacja
@@ -443,9 +443,9 @@ volumes:
 2. **Tworzenie indeksów giełdowych**
    - Utworzenie WIG20 z największymi spółkami
    - Utworzenie indeksów branżowych (WIG-BANKI, WIG-IT)
-3. **Dodanie rekomendacji w app-recommendation**
+3. **Dodanie rekomendacji w stock-recommendation**
    - Rekomendacja jest publikowana na Kafka
-   - app-stock odbiera i aktualizuje liczniki
+   - stock-app odbiera i aktualizuje liczniki
 4. **Przeglądanie akcji z informacją o indeksach i rekomendacjach**
    - Klient widzi do jakich indeksów należy akcja
    - Widzi ile jest rekomendacji BUY/SELL/HOLD
