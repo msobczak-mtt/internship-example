@@ -10,7 +10,7 @@ Projekt składa się z dwóch mikroserwisów Spring Boot symulujących podstawow
 
 1. **stock-app** - aplikacja do zarządzania akcjami i transakcjami
 2. **stock-recommendation** - serwis prostych rekomendacji akcji
-3. **docker-stock** - zależności do uruchomienia aplikacji w kontenerach Docker
+3. **stock-docker** - zależności do uruchomienia aplikacji w kontenerach Docker
 
 ## Architektura
 

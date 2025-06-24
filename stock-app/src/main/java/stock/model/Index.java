@@ -1,5 +1,6 @@
 package stock.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,12 +30,13 @@ public class Index {
     
     private String description;      // opis indeksu
     
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "index_stocks",
         joinColumns = @JoinColumn(name = "index_id"),
         inverseJoinColumns = @JoinColumn(name = "stock_id")
     )
+    @JsonIgnoreProperties("indices")  // Ignoruj pole 'indices' w Stock podczas serializacji
     private Set<Stock> stocks = new HashSet<>();  // akcje w indeksie
     
     private BigDecimal currentValue; // aktualna wartość indeksu

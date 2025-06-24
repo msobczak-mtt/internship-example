@@ -1,5 +1,6 @@
 package stock.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,7 +32,8 @@ public class Stock {
     
     private LocalDateTime lastUpdate;
     
-    @ManyToMany(mappedBy = "stocks")
+    @ManyToMany(mappedBy = "stocks", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("stocks")  // Ignoruj pole 'stocks' w Index podczas serializacji
     private Set<Index> indices = new HashSet<>();  // indeksy do których należy akcja
     
     @Transient

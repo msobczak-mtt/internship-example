@@ -32,19 +32,19 @@ INSERT INTO stock_index (symbol, name, description, current_value, last_update) 
 -- Relacje między akcjami a indeksami (Index_Stocks)
 -- WIG20 - największe spółki
 INSERT INTO index_stocks (index_id, stock_id) VALUES
-(1, 1), -- PKO -> WIG20
-(1, 3), -- KGHM -> WIG20
-(1, 4), -- PGE -> WIG20
-(1, 5), -- CDR -> WIG20
-(1, 6), -- ALE -> WIG20
-(1, 7), -- PEO -> WIG20
-(1, 9), -- LPP -> WIG20
-(1, 10); -- DNP -> WIG20
+(2, 1), -- PKO -> WIG-BANKI
+(2, 7); -- PEO -> WIG-BANKI
 
 -- WIG-BANKI - banki
 INSERT INTO index_stocks (index_id, stock_id) VALUES
-(2, 1), -- PKO -> WIG-BANKI
-(2, 7); -- PEO -> WIG-BANKI
+                                                  (1, 1), -- PKO -> WIG20
+                                                  (1, 3), -- KGHM -> WIG20
+                                                  (1, 4), -- PGE -> WIG20
+                                                  (1, 5), -- CDR -> WIG20
+                                                  (1, 6), -- ALE -> WIG20
+                                                  (1, 7), -- PEO -> WIG20
+                                                  (1, 9), -- LPP -> WIG20
+                                                  (1, 10); -- DNP -> WIG20
 
 -- WIG-IT - informatyka
 INSERT INTO index_stocks (index_id, stock_id) VALUES
