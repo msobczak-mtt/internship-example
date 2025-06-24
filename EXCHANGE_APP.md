@@ -2,10 +2,15 @@
 
 ## Opis projektu
 
+Przygotowujemy projekt aplikacji giełdowych, który będzie służył jako przykład
+do nauki Spring Boot, JPA, MongoDB i Kafka. Projekt ma na celu symulację podstawowego systemu handlu giełdowego 
+z rekomendacjami akcji. Jest to uproszczona wersja, która ma być zrealizowana w ciągu 4 dni i służy tylko nauczeniu podstaw programowania w javie.
+
 Projekt składa się z dwóch mikroserwisów Spring Boot symulujących podstawowy system handlu giełdowego:
 
 1. **stock-app** - aplikacja do zarządzania akcjami i transakcjami
 2. **stock-recommendation** - serwis prostych rekomendacji akcji
+3. **docker-stock** - zależności do uruchomienia aplikacji w kontenerach Docker
 
 ## Architektura
 
@@ -361,13 +366,16 @@ volumes:
 - Konfiguracja MongoDB
 
 **4. Repozytoria (2h)**
-- StockRepository, ClientRepository, TransactionRepository
+- StockRepository, ClientRepository, TransactionRepository w stock-app w trzech wariantach:
+  - jdbc
+  - jpa
+  - mem 
 - IndexRepository z metodami do zarządzania relacją M:N
-- RecommendationRepository
+- RecommendationRepository w stock-recommendation
 - Podstawowe metody CRUD
 
 **5. Dane testowe (1h)**
-- data.sql z przykładowymi akcjami, klientami i indeksami
+- data.sql z przykładowymi akcjami, klientami i indeksami z indeksów WIG-20, WIG-BANKI, WIG-IT
 - Inicjalizacja relacji między akcjami a indeksami
 - CommandLineRunner dla MongoDB
 
