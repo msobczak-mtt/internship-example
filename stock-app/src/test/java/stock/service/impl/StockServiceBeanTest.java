@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import stock.model.Stock;
-import stock.repository.StockDao;
+import stock.repository.StockRepository;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 class StockServiceBeanTest {
 
     @Mock
-    private StockDao stockDao;
+    private StockRepository stockRepository;
 
     @InjectMocks
     private StockServiceBean stockService;
@@ -41,85 +41,70 @@ class StockServiceBeanTest {
     void should_find_all_stocks() {
         // given
         List<Stock> stocks = Arrays.asList(testStock);
-        when(stockDao.findAll()).thenReturn(stocks);
+        when(stockRepository.findAll()).thenReturn(stocks);
 
         // when
-        List<Stock> result = stockService.findAll();
+        List<Stock> result = stockService.getAllStocks();
 
         // then
         assertThat(result).hasSize(1);
         assertThat(result.get(0)).isEqualTo(testStock);
-        verify(stockDao).findAll();
+        verify(stockRepository).findAll();
     }
 
     @Test
     void should_find_stock_by_id() {
         // given
-        when(stockDao.findById(1L)).thenReturn(Optional.of(testStock));
+        when(stockRepository.findById(1L)).thenReturn(Optional.of(testStock));
 
         // when
-        Optional<Stock> result = stockService.findById(1L);
+        Stock result = stockService.getStockById(1L);
 
         // then
-        assertThat(result).isPresent();
-        assertThat(result.get()).isEqualTo(testStock);
-        verify(stockDao).findById(1L);
+        assertThat(result).isEqualTo(testStock);
+        verify(stockRepository).findById(1L);
     }
 
     @Test
     void should_find_stock_by_symbol() {
         // given
-        when(stockDao.findBySymbol("PKO")).thenReturn(Optional.of(testStock));
+        when(stockRepository.findBySymbol("PKO")).thenReturn(Optional.of(testStock));
 
         // when
-        Optional<Stock> result = stockService.findBySymbol("PKO");
+        Stock result = stockService.getStockBySymbol("PKO");
 
         // then
-        assertThat(result).isPresent();
-        assertThat(result.get()).isEqualTo(testStock);
-        verify(stockDao).findBySymbol("PKO");
+        assertThat(result).isEqualTo(testStock);
+        verify(stockRepository).findBySymbol("PKO");
     }
 
     @Test
-    void should_create_new_stock() {
+    void should_add_new_stock() {
         // given
-        when(stockDao.findBySymbol("CCC")).thenReturn(Optional.empty());
-        when(stockDao.save(any(Stock.class))).thenAnswer(invocation -> {
+        when(stockRepository.save(any(Stock.class))).thenAnswer(invocation -> {
             Stock stock = invocation.getArgument(0);
             stock.setId(2L);
             return stock;
         });
 
+        Stock newStock = new Stock("CCC", "CCC S.A.", new BigDecimal("15.20"));
+
         // when
-        Stock result = stockService.createStock("CCC", "CCC S.A.", new BigDecimal("15.20"));
+        Stock result = stockService.addStock(newStock);
 
         // then
         assertThat(result.getSymbol()).isEqualTo("CCC");
         assertThat(result.getCompanyName()).isEqualTo("CCC S.A.");
         assertThat(result.getCurrentPrice()).isEqualTo(new BigDecimal("15.20"));
-        verify(stockDao).findBySymbol("CCC");
-        verify(stockDao).save(any(Stock.class));
-    }
-
-    @Test
-    void should_throw_exception_when_creating_stock_with_existing_symbol() {
-        // given
-        when(stockDao.findBySymbol("PKO")).thenReturn(Optional.of(testStock));
-
-        // when & then
-        assertThatThrownBy(() -> stockService.createStock("PKO", "PKO Bank", new BigDecimal("35.00")))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Stock with symbol PKO already exists");
-
-        verify(stockDao).findBySymbol("PKO");
-        verify(stockDao, never()).save(any(Stock.class));
+        assertThat(result.getLastUpdate()).isNotNull();
+        verify(stockRepository).save(any(Stock.class));
     }
 
     @Test
     void should_update_stock_price() {
         // given
-        when(stockDao.findById(1L)).thenReturn(Optional.of(testStock));
-        when(stockDao.save(any(Stock.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(stockRepository.findById(1L)).thenReturn(Optional.of(testStock));
+        when(stockRepository.save(any(Stock.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // when
         Stock result = stockService.updatePrice(1L, new BigDecimal("40.00"));
@@ -127,51 +112,21 @@ class StockServiceBeanTest {
         // then
         assertThat(result.getCurrentPrice()).isEqualTo(new BigDecimal("40.00"));
         assertThat(result.getLastUpdate()).isNotNull();
-        verify(stockDao).findById(1L);
-        verify(stockDao).save(testStock);
+        verify(stockRepository).findById(1L);
+        verify(stockRepository).save(testStock);
     }
 
     @Test
     void should_throw_exception_when_updating_price_of_non_existing_stock() {
         // given
-        when(stockDao.findById(999L)).thenReturn(Optional.empty());
+        when(stockRepository.findById(999L)).thenReturn(Optional.empty());
 
         // when & then
         assertThatThrownBy(() -> stockService.updatePrice(999L, new BigDecimal("40.00")))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Stock not found with id: 999");
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("Stock with id 999 not found");
 
-        verify(stockDao).findById(999L);
-        verify(stockDao, never()).save(any(Stock.class));
-    }
-
-    @Test
-    void should_update_recommendation_counts() {
-        // given
-        when(stockDao.findBySymbol("PKO")).thenReturn(Optional.of(testStock));
-
-        // when
-        stockService.updateRecommendationCounts("PKO", 5, 2, 3);
-
-        // then
-        assertThat(testStock.getBuyRecommendations()).isEqualTo(5);
-        assertThat(testStock.getSellRecommendations()).isEqualTo(2);
-        assertThat(testStock.getHoldRecommendations()).isEqualTo(3);
-        verify(stockDao).findBySymbol("PKO");
-    }
-
-    @Test
-    void should_handle_null_recommendation_counts() {
-        // given
-        when(stockDao.findBySymbol("PKO")).thenReturn(Optional.of(testStock));
-
-        // when
-        stockService.updateRecommendationCounts("PKO", null, null, null);
-
-        // then
-        assertThat(testStock.getBuyRecommendations()).isEqualTo(0);
-        assertThat(testStock.getSellRecommendations()).isEqualTo(0);
-        assertThat(testStock.getHoldRecommendations()).isEqualTo(0);
-        verify(stockDao).findBySymbol("PKO");
+        verify(stockRepository).findById(999L);
+        verify(stockRepository, never()).save(any(Stock.class));
     }
 }

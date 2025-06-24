@@ -4,21 +4,18 @@ import stock.model.Stock;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 public interface StockService {
+
+    List<Stock> getAllStocks();
     
-    List<Stock> findAll();
+    Stock getStockById(Long id);
     
-    Optional<Stock> findById(Long id);
+    Stock getStockBySymbol(String symbol);
     
-    Optional<Stock> findBySymbol(String symbol);
+    List<Stock> getStocksByCompanyName(String companyName);
     
-    List<Stock> findByCompanyNameContaining(String companyName);
-    
-    Stock createStock(String symbol, String companyName, BigDecimal currentPrice);
+    Stock addStock(Stock stock);
     
     Stock updatePrice(Long id, BigDecimal newPrice);
-    
-    void updateRecommendationCounts(String symbol, Integer buyCount, Integer sellCount, Integer holdCount);
 }
