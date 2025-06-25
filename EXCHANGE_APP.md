@@ -6,11 +6,12 @@ Przygotowujemy projekt aplikacji giełdowych, który będzie służył jako przy
 do nauki Spring Boot, JPA, MongoDB i Kafka. Projekt ma na celu symulację podstawowego systemu handlu giełdowego 
 z rekomendacjami akcji. Jest to uproszczona wersja, która ma być zrealizowana w ciągu 4 dni i służy tylko nauczeniu podstaw programowania w javie.
 
-Projekt składa się z dwóch mikroserwisów Spring Boot symulujących podstawowy system handlu giełdowego:
+Projekt składa się z trzech mikroserwisów Spring Boot symulujących podstawowy system handlu giełdowego:
 
 1. **stock-app** - aplikacja do zarządzania akcjami i transakcjami
 2. **stock-recommendation** - serwis prostych rekomendacji akcji
-3. **stock-docker** - zależności do uruchomienia aplikacji w kontenerach Docker
+3. **stock-client** - klient WebSocket do odbierania informacji o transakcjach
+4. **stock-docker** - zależności do uruchomienia aplikacji w kontenerach Docker
 
 ## Architektura
 
@@ -27,27 +28,27 @@ public class Stock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(unique = true, nullable = false)
     private String symbol;          // np. "PKO", "CCC", "KGHM"
-    
+
     @Column(nullable = false)
     private String companyName;     // pełna nazwa spółki
-    
+
     @Column(nullable = false)
     private BigDecimal currentPrice;// aktualna cena
-    
+
     private LocalDateTime lastUpdate;
-    
+
     @ManyToMany(mappedBy = "stocks")
     private Set<Index> indices = new HashSet<>();  // indeksy do których należy akcja
-    
+
     @Transient
     private Integer buyRecommendations = 0;   // liczba rekomendacji kupna
-    
+
     @Transient
     private Integer sellRecommendations = 0;  // liczba rekomendacji sprzedaży
-    
+
     @Transient
     private Integer holdRecommendations = 0;  // liczba rekomendacji trzymaj
 }
@@ -60,19 +61,19 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(nullable = false)
     private String firstName;
-    
+
     @Column(nullable = false)
     private String lastName;
-    
+
     @Column(unique = true, nullable = false)
     private String email;
-    
+
     @Column(nullable = false)
     private BigDecimal balance;     // środki na koncie
-    
+
     private LocalDateTime registrationDate;
 }
 ```
@@ -84,24 +85,24 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
-    
+
     @ManyToOne
     @JoinColumn(name = "stock_id", nullable = false)
     private Stock stock;
-    
+
     @Enumerated(EnumType.STRING)
     private TransactionType type;    // BUY, SELL
-    
+
     @Column(nullable = false)
     private Long quantity;
-    
+
     @Column(nullable = false)
     private BigDecimal price;        // cena w momencie transakcji
-    
+
     private LocalDateTime transactionDate;
 }
 ```
@@ -114,15 +115,15 @@ public class Index {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(unique = true, nullable = false)
     private String symbol;           // np. "WIG20", "mWIG40", "sWIG80"
-    
+
     @Column(nullable = false)
     private String name;             // pełna nazwa indeksu
-    
+
     private String description;      // opis indeksu
-    
+
     @ManyToMany
     @JoinTable(
         name = "index_stocks",
@@ -130,9 +131,9 @@ public class Index {
         inverseJoinColumns = @JoinColumn(name = "stock_id")
     )
     private Set<Stock> stocks = new HashSet<>();  // akcje w indeksie
-    
+
     private BigDecimal currentValue; // aktualna wartość indeksu
-    
+
     private LocalDateTime lastUpdate;
 }
 ```
@@ -209,17 +210,17 @@ Prosty serwis rekomendacji akcji.
 public class Recommendation {
     @Id
     private String id;
-    
+
     private String stockSymbol;
-    
+
     private RecommendationType type; // BUY, SELL, HOLD
-    
+
     private BigDecimal targetPrice;
-    
+
     private String reason;          // krótkie uzasadnienie
-    
+
     private LocalDateTime createdAt;
-    
+
     private String analyst;         // nazwa analityka
 }
 ```
@@ -240,7 +241,76 @@ public class Recommendation {
 - createRecommendation()
 - deleteRecommendation()
 
-## Komunikacja między aplikacjami (Kafka)
+## Komunikacja między aplikacjami
+
+### Server-Sent Events (stock-app -> stock-client)
+
+**stock-app** udostępnia endpoint Server-Sent Events (SSE), który umożliwia klientom otrzymywanie informacji o transakcjach w czasie rzeczywistym.
+
+#### Endpoint SSE
+- `http://localhost:8080/api/transaction-events/subscribe` - endpoint do subskrypcji informacji o transakcjach
+
+#### Format wiadomości
+```json
+{
+  "id": 123,
+  "clientId": 1,
+  "clientName": "Jan Kowalski",
+  "stockId": 2,
+  "stockSymbol": "PKO",
+  "type": "BUY",
+  "quantity": 10,
+  "price": 35.50,
+  "totalValue": 355.00,
+  "transactionDate": "2024-01-15T10:30:00"
+}
+```
+
+### stock-client (port 8090)
+
+Klient WebSocket do odbierania informacji o transakcjach.
+
+#### Funkcjonalność
+- Nawiązywanie połączenia WebSocket z aplikacją stock-app
+- Odbieranie i wyświetlanie informacji o transakcjach w czasie rzeczywistym
+- Wyświetlanie szczegółów transakcji w konsoli
+
+### Kafka (stock-recommendation -> stock-app)</SEARCH>
+<REPLACE>## Komunikacja między aplikacjami
+
+### WebSocket (stock-app -> stock-client)
+
+**stock-app** udostępnia endpoint WebSocket, który umożliwia klientom otrzymywanie informacji o transakcjach w czasie rzeczywistym.
+
+#### Endpoint WebSocket
+- `ws://localhost:8080/ws/transactions` - endpoint do subskrypcji informacji o transakcjach
+
+#### Format wiadomości
+```json
+{
+  "id": 123,
+  "clientId": 1,
+  "clientName": "Jan Kowalski",
+  "stockId": 2,
+  "stockSymbol": "PKO",
+  "type": "BUY",
+  "quantity": 10,
+  "price": 35.50,
+  "totalValue": 355.00,
+  "transactionDate": "2024-01-15T10:30:00"
+}
+```
+
+### stock-client (port 8090)
+
+Klient WebSocket do odbierania informacji o transakcjach.
+
+#### Funkcjonalność
+- Nawiązywanie połączenia WebSocket z aplikacją stock-app
+- Odbieranie i wyświetlanie informacji o transakcjach w czasie rzeczywistym
+- Wyświetlanie szczegółów transakcji w konsoli
+
+### Kafka (stock-recommendation -> stock-app)
 
 ### Topiki Kafka
 
@@ -320,7 +390,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-  
+
   mongodb:
     image: mongo:6
     environment:
@@ -328,7 +398,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: admin
     ports:
       - "27017:27017"
-  
+
   kafka:
     image: bitnami/kafka:3.6
     ports:
