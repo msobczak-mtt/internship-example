@@ -9,7 +9,9 @@ import stock.service.StockService;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -21,45 +23,59 @@ public class StockServiceBean implements StockService {
     @Override
     public List<Stock> getAllStocks() {
         log.info("Finding all stocks...");
-        return stockRepository.findAll();
+        List<Stock> stocks = stockRepository.findAll();
+
+        // Create a defensive copy of the list to prevent ConcurrentModificationException during serialization
+        return new ArrayList<>(stocks);
     }
 
     @Override
     public Stock getStockById(Long id) {
         log.info("Finding stock by id: {}", id);
-        return stockRepository.findById(id).orElse(null);
+        Stock stock = stockRepository.findById(id).orElse(null);
+        // No need for additional processing as Stock.getIndices() already returns a synchronized copy
+        return stock;
     }
 
     @Override
     public Stock getStockBySymbol(String symbol) {
         log.info("Finding stock by symbol: {}", symbol);
-        return stockRepository.findBySymbol(symbol).orElse(null);
+        Stock stock = stockRepository.findBySymbol(symbol).orElse(null);
+        // No need for additional processing as Stock.getIndices() already returns a synchronized copy
+        return stock;
     }
 
     @Override
     public List<Stock> getStocksByCompanyName(String companyName) {
         log.info("Finding stocks by company name containing: {}", companyName);
-        return stockRepository.findByCompanyNameContaining(companyName);
+        List<Stock> stocks = stockRepository.findByCompanyNameContaining(companyName);
+
+        // Create a defensive copy of the list to prevent ConcurrentModificationException during serialization
+        return new ArrayList<>(stocks);
     }
 
     @Override
     public Stock addStock(Stock stock) {
         log.info("Adding stock: {} - {}", stock.getSymbol(), stock.getCompanyName());
         stock.setLastUpdate(LocalDateTime.now());
-        return stockRepository.save(stock);
+        Stock savedStock = stockRepository.save(stock);
+        // No need for additional processing as Stock.getIndices() already returns a synchronized copy
+        return savedStock;
     }
 
     @Override
     public Stock updatePrice(Long id, BigDecimal newPrice) {
         log.info("Updating price for stock id: {} to {}", id, newPrice);
-        
+
         Stock stock = stockRepository.findById(id).orElse(null);
         if (stock != null) {
             stock.setCurrentPrice(newPrice);
             stock.setLastUpdate(LocalDateTime.now());
-            return stockRepository.save(stock);
+            Stock updatedStock = stockRepository.save(stock);
+            // No need for additional processing as Stock.getIndices() already returns a synchronized copy
+            return updatedStock;
         }
-        
+
         throw new RuntimeException("Stock with id " + id + " not found");
     }
 }

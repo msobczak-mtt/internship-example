@@ -2,7 +2,9 @@ package stock.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -18,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Data
 @NoArgsConstructor
 @ToString(exclude = "stocks")
+@lombok.EqualsAndHashCode(exclude = {"stocks"})
 public class Index {
 
     @Id
@@ -38,8 +41,14 @@ public class Index {
         joinColumns = @JoinColumn(name = "index_id"),
         inverseJoinColumns = @JoinColumn(name = "stock_id")
     )
-    @JsonIgnoreProperties("indices")  // Ignoruj pole 'indices' w Stock podczas serializacji
+    @Getter(AccessLevel.NONE)
     private Set<Stock> stocks = Collections.newSetFromMap(new ConcurrentHashMap<>());  // akcje w indeksie
+
+    public Set<Stock> getStocks() {
+        synchronized(stocks) {
+            return new HashSet<>(stocks);
+        }
+    }
 
     private BigDecimal currentValue; // aktualna wartość indeksu
 

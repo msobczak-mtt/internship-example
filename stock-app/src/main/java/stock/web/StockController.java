@@ -23,7 +23,13 @@ public class StockController {
     @GetMapping
     public List<Stock> getAllStocks() {
         log.info("Getting all stocks");
-        return stockService.getAllStocks();
+        List<Stock> allStocks = stockService.getAllStocks();
+        if (allStocks.isEmpty()) {
+            log.warn("No stocks found");
+        } else {
+            log.info("Found {} stocks", allStocks.size());
+        }
+        return allStocks;
     }
 
     // Przykład z ResponseEntity - lepsze dla obsługi błędów

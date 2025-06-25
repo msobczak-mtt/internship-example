@@ -2,7 +2,9 @@ package stock.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -17,6 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Data
 @NoArgsConstructor
 @ToString(exclude = "indices")
+@JsonIgnoreProperties("indices")
+@lombok.EqualsAndHashCode(exclude = {"indices"})
 public class Stock {
 
     @Id
@@ -35,8 +39,16 @@ public class Stock {
     private LocalDateTime lastUpdate;
 
     @ManyToMany(mappedBy = "stocks", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("stocks")  // Ignoruj pole 'stocks' w Index podczas serializacji
+    @Getter(AccessLevel.NONE)
     private Set<Index> indices = Collections.newSetFromMap(new ConcurrentHashMap<>());  // indeksy do których należy akcja
+
+    // Method to get a thread-safe copy of indices for serialization
+
+    public Set<Index> getIndices() {
+        synchronized(indices) {
+            return new HashSet<>(indices);
+        }
+    }
 
     @Transient
     private Integer buyRecommendations = 0;   // liczba rekomendacji kupna
