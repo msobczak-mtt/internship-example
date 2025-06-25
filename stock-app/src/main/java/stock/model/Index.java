@@ -8,8 +8,10 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Entity
 @Table(name = "stock_index")  // "index" jest słowem kluczowym w SQL
@@ -17,19 +19,19 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString(exclude = "stocks")
 public class Index {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(unique = true, nullable = false)
     private String symbol;           // np. "WIG20", "mWIG40", "sWIG80"
-    
+
     @Column(nullable = false)
     private String name;             // pełna nazwa indeksu
-    
+
     private String description;      // opis indeksu
-    
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "index_stocks",
@@ -37,10 +39,10 @@ public class Index {
         inverseJoinColumns = @JoinColumn(name = "stock_id")
     )
     @JsonIgnoreProperties("indices")  // Ignoruj pole 'indices' w Stock podczas serializacji
-    private Set<Stock> stocks = new HashSet<>();  // akcje w indeksie
-    
+    private Set<Stock> stocks = Collections.newSetFromMap(new ConcurrentHashMap<>());  // akcje w indeksie
+
     private BigDecimal currentValue; // aktualna wartość indeksu
-    
+
     private LocalDateTime lastUpdate;
 
     public Index(String symbol, String name, String description) {
